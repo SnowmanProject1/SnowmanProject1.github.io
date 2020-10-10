@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Snowman</title>
+    </head>
+    <body>
+        <input id="guesses">
+        <div id="game">
+            <h1>Snowman (Trigger free version of H***man)</h1>
+            <button id="Start">Click to Start</button>
+        </div>
+
+        <script src="https://www.gstatic.com/firebasejs/7.23.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.21.0/firebase-database.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+        <script>
+            var firebaseConfig = {
+                apiKey: "AIzaSyACLphdsKvBnDcxPjS7Vr7QZjieQyiLnw8",
+                authDomain: "hangman-a1fd6.firebaseapp.com",
+                databaseURL: "https://hangman-a1fd6.firebaseio.com",
+                projectId: "hangman-a1fd6",
+                storageBucket: "hangman-a1fd6.appspot.com",
+                messagingSenderId: "21454876467",
+                appId: "1:21454876467:web:99637cafa665eb60e25846"
+            };
+            // Initialize Firebase
+            firebase.initializeApp(firebaseConfig);
+            let myDatabase = firebase.database();
+
+            let gameData = {};
+
+
+        </script>
+    </body>
+</html>
