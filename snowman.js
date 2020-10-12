@@ -22,8 +22,11 @@ let guessed = [];
 let wordStatus = null;
 
 function randomWord() {
-    answer = programming_languages[Math.floor(Math.random() * programming_languages.length)];
-}
+    //answer = programming_languages[Math.floor(Math.random() * programming_languages.length)];
+    myDatabase.ref("words").child("cword").once('value', ss => {
+        let wordcount = parseInt(ss.val());
+        randomword = parseInt(Math.floor(wordcount * Math.random()));});
+    }
 
 function generateButtons() {
     let buttonsHTML = 'abcdefghijklmnopqrstuvwxyz'.split('').map(letter =>
@@ -40,10 +43,10 @@ function handleGuess(chosenLetter) {
     guessed.indexOf(chosenLetter) === -1 ? guessed.push(chosenLetter) : null;
     document.getElementById(chosenLetter).setAttribute('disabled', true);
 
-    if (answer.indexOf(chosenLetter) >= 0) {
+    if (randomword.indexOf(chosenLetter) >= 0) {
         guessedWord();
         checkIfGameWon();
-    } else if (answer.indexOf(chosenLetter) === -1) {
+    } else if (randomword.indexOf(chosenLetter) === -1) {
         mistakes++;
         updateMistakes();
         checkIfGameLost();
@@ -56,20 +59,20 @@ function updateHangmanPicture() {
 }
 
 function checkIfGameWon() {
-    if (wordStatus === answer) {
+    if (wordStatus === randomword) {
         document.getElementById('keyboard').innerHTML = 'You Won!!!';
     }
 }
 
 function checkIfGameLost() {
     if (mistakes === maxWrong) {
-        document.getElementById('wordSpotlight').innerHTML = 'The answer was: ' + answer;
+        document.getElementById('wordSpotlight').innerHTML = 'The answer was: ' + randomword;
         document.getElementById('keyboard').innerHTML = 'You Lost!!!';
     }
 }
 
 function guessedWord() {
-    wordStatus = answer.split('').map(letter => (guessed.indexOf(letter) >= 0 ? letter : " _ ")).join('');
+    wordStatus = randomword.split('').map(letter => (guessed.indexOf(letter) >= 0 ? letter : " _ ")).join('');
 
     document.getElementById('wordSpotlight').innerHTML = wordStatus;
 }
