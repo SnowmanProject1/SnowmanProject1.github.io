@@ -39,17 +39,12 @@ let wordStatus = null;
 
 function randomWord() {
     //answer = programming_languages[Math.floor(Math.random() * programming_languages.length)];
-    myDatabase.ref("words").child("cword").once('value', ss => {
         let wordcount = 227;
         let randomword = parseInt(Math.floor(wordcount * Math.random()));
         myDatabase.ref("words").child("cword").child(randomword).once('value', ss2 => {
             answer = ss2.val();
-            //myDatabase.ref("dictionary").child("alphabetized").child(rack).once('value', ss3 => {
-                //let words = ss3.val();
-                //answer = randomword;
             });
-        });
-    //});
+       
             console.log("Answer is: " + answer);
 
         }
