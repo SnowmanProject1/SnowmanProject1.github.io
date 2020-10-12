@@ -48,6 +48,8 @@ function randomWord() {
 
 }
 
+console.log("Answer is: " +answer);
+
 function generateButtons() {
     let buttonsHTML = 'abcdefghijklmnopqrstuvwxyz'.split('').map(letter =>
         `
