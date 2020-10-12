@@ -1,3 +1,21 @@
+src = "https://www.gstatic.com/firebasejs/7.23.0/firebase-app.js"
+src = "https://www.gstatic.com/firebasejs/7.21.0/firebase-database.js"
+src = "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+
+var firebaseConfig = {
+    apiKey: "AIzaSyACLphdsKvBnDcxPjS7Vr7QZjieQyiLnw8",
+    authDomain: "hangman-a1fd6.firebaseapp.com",
+    databaseURL: "https://hangman-a1fd6.firebaseio.com",
+    projectId: "hangman-a1fd6",
+    storageBucket: "hangman-a1fd6.appspot.com",
+    messagingSenderId: "21454876467",
+    appId: "1:21454876467:web:99637cafa665eb60e25846"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+let myDatabase = firebase.database();
+
+
 var programming_languages = [
     "python",
     "javascript",
@@ -25,8 +43,9 @@ function randomWord() {
     //answer = programming_languages[Math.floor(Math.random() * programming_languages.length)];
     myDatabase.ref("words").child("cword").once('value', ss => {
         let wordcount = parseInt(ss.val());
-        randomword = parseInt(Math.floor(wordcount * Math.random()));});
-    }
+        randomword = parseInt(Math.floor(wordcount * Math.random()));
+    });
+}
 
 function generateButtons() {
     let buttonsHTML = 'abcdefghijklmnopqrstuvwxyz'.split('').map(letter =>
