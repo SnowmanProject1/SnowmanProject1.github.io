@@ -1,6 +1,4 @@
-src = "https://www.gstatic.com/firebasejs/7.23.0/firebase-app.js"
-src = "https://www.gstatic.com/firebasejs/7.21.0/firebase-database.js"
-src = "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+
 
 var firebaseConfig = {
     apiKey: "AIzaSyACLphdsKvBnDcxPjS7Vr7QZjieQyiLnw8",
