@@ -44,11 +44,9 @@ function randomWord() {
         let randomword = parseInt(Math.floor(wordcount * Math.random()));
         answer = randomword;
     });
-
+    console.log("Answer is: " +answer);
 
 }
-
-console.log("Answer is: " +answer);
 
 function generateButtons() {
     let buttonsHTML = 'abcdefghijklmnopqrstuvwxyz'.split('').map(letter =>
