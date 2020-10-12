@@ -1,36 +1,88 @@
 <!doctype html>
 <html>
-    <head>
-        <title>Snowman</title>
-    </head>
-    <body>
-        <input id="guesses">
-        <div id="game">
-            <h1>Snowman (Trigger free version of H***man)</h1>
-            <button id="Start">Click to Start</button>
-        </div>
 
-        <script src="https://www.gstatic.com/firebasejs/7.23.0/firebase-app.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/7.21.0/firebase-database.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<head>
+    <title>Snowman</title>
+</head>
 
-        <script>
-            var firebaseConfig = {
-                apiKey: "AIzaSyACLphdsKvBnDcxPjS7Vr7QZjieQyiLnw8",
-                authDomain: "hangman-a1fd6.firebaseapp.com",
-                databaseURL: "https://hangman-a1fd6.firebaseio.com",
-                projectId: "hangman-a1fd6",
-                storageBucket: "hangman-a1fd6.appspot.com",
-                messagingSenderId: "21454876467",
-                appId: "1:21454876467:web:99637cafa665eb60e25846"
-            };
-            // Initialize Firebase
-            firebase.initializeApp(firebaseConfig);
-            let myDatabase = firebase.database();
+<body>
+    <input id="guesses">
+    <div id="game">
+        <h1>Snowman (Trigger free version of H***man)</h1>
+        <button id="Start">Click to Start</button>
+    </div>
 
-            let gameData = {};
+    <script src="https://www.gstatic.com/firebasejs/7.23.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.21.0/firebase-database.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyACLphdsKvBnDcxPjS7Vr7QZjieQyiLnw8",
+            authDomain: "hangman-a1fd6.firebaseapp.com",
+            databaseURL: "https://hangman-a1fd6.firebaseio.com",
+            projectId: "hangman-a1fd6",
+            storageBucket: "hangman-a1fd6.appspot.com",
+            messagingSenderId: "21454876467",
+            appId: "1:21454876467:web:99637cafa665eb60e25846"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        let myDatabase = firebase.database();
 
-        </script>
-    </body>
+        let gameData = {};
+
+        myDatabase.ref("running").on("value", ss => {
+            let status = ss.val();
+            if (status == 1) {
+                $("#start").attr("disabled", true);
+                myDatabase.ref("activeGame").on("value", ss => {
+                    updateGame(ss.val());
+                });
+            } else {
+                restart();
+            }
+        });
+
+        let restart = function () {
+
+            function generateButtons() {
+                let buttonsHTML = 'abcdefghijklmnopqrstuvwxyz'.split('').map(letter =>
+                    `
+      <button
+        class="btn btn-lg btn-primary m-2"
+        id='` + letter + `'
+        onClick="handleGuess('` + letter + `')"
+      >
+        ` + letter + `
+      </button>
+    `).join('');
+
+                document.getElementById('keyboard').innerHTML = buttonsHTML;
+            }
+
+            $("#game").html(`<h1>Snowman (Trigger free version of H***man)</h1>
+<button id="start">Click to Start</button>`);
+
+            $("#start").click(function () {
+                myDatabase.ref("running").set(1);
+                myDatabase.ref("words").child("cword").once('value', ss => {
+                    let wordcount = parseInt(ss.val());
+                    let randomword = parseInt(Math.floor(wordcount * Math.random()));
+                    myDatabase.ref("dictionary").child("cword").child(randomword).once('value', ss2 => {
+                        let word = ss2.val();
+                        myDatabase.ref("dictionary").child("cword").child(word).once('value', ss3 => {
+                            let words = ss3.val();
+                            let gameData = { words: words };
+                            myDatabase.ref("activeGame").set(gameData);
+                        });
+                    });
+                })
+            });
+
+        }
+
+    </script>
+</body>
+
 </html>
