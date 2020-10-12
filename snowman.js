@@ -41,17 +41,24 @@ function randomWord() {
     //answer = programming_languages[Math.floor(Math.random() * programming_languages.length)];
     myDatabase.ref("words").child("cword").once('value', ss => {
         let wordcount = parseInt(ss.val());
-        randomword = parseInt(Math.floor(wordcount * Math.random()));
+        let randomword = parseInt(Math.floor(wordcount * Math.random()));
+        answer = randomword;
     });
+
+
 }
 
 function generateButtons() {
     let buttonsHTML = 'abcdefghijklmnopqrstuvwxyz'.split('').map(letter =>
         `
-    <button class="btn btn-lg btn-primary m-2" id='` + letter + `' onClick="handleGuess('` + letter + `')">
-        ` + letter + `
-    </button>
-    `).join('');
+        <button
+          class="btn btn-lg btn-primary m-2"
+          id='` + letter + `'
+          onClick="handleGuess('` + letter + `')"
+        >
+          ` + letter + `
+        </button>
+      `).join('');
 
     document.getElementById('keyboard').innerHTML = buttonsHTML;
 }
@@ -60,10 +67,10 @@ function handleGuess(chosenLetter) {
     guessed.indexOf(chosenLetter) === -1 ? guessed.push(chosenLetter) : null;
     document.getElementById(chosenLetter).setAttribute('disabled', true);
 
-    if (randomword.indexOf(chosenLetter) >= 0) {
+    if (answer.indexOf(chosenLetter) >= 0) {
         guessedWord();
         checkIfGameWon();
-    } else if (randomword.indexOf(chosenLetter) === -1) {
+    } else if (answer.indexOf(chosenLetter) === -1) {
         mistakes++;
         updateMistakes();
         checkIfGameLost();
@@ -76,20 +83,20 @@ function updateHangmanPicture() {
 }
 
 function checkIfGameWon() {
-    if (wordStatus === randomword) {
+    if (wordStatus === answer) {
         document.getElementById('keyboard').innerHTML = 'You Won!!!';
     }
 }
 
 function checkIfGameLost() {
     if (mistakes === maxWrong) {
-        document.getElementById('wordSpotlight').innerHTML = 'The answer was: ' + randomword;
+        document.getElementById('wordSpotlight').innerHTML = 'The answer was: ' + answer;
         document.getElementById('keyboard').innerHTML = 'You Lost!!!';
     }
 }
 
 function guessedWord() {
-    wordStatus = randomword.split('').map(letter => (guessed.indexOf(letter) >= 0 ? letter : " _ ")).join('');
+    wordStatus = answer.split('').map(letter => (guessed.indexOf(letter) >= 0 ? letter : " _ ")).join('');
 
     document.getElementById('wordSpotlight').innerHTML = wordStatus;
 }
