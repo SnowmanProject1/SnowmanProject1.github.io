@@ -39,7 +39,7 @@ let wordStatus = null;
 
 function randomWord() {
     //answer = programming_languages[Math.floor(Math.random() * programming_languages.length)];
-        let wordcount = 227;
+        let wordcount = 220;
         let randomword = parseInt(Math.floor(wordcount * Math.random()));
         myDatabase.ref("words").child("cword").child(randomword).once('value', ss2 => {
             answer = ss2.val();
