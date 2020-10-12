@@ -46,7 +46,11 @@
 
         let restart = function () {
 
-            function generateButtons() {
+            $("#game").html(`<h1>Snowman (Trigger free version of H***man)</h1>
+<button id="start">Click to Start</button>`);
+
+            $("#start").click(function () {
+
                 let buttonsHTML = 'abcdefghijklmnopqrstuvwxyz'.split('').map(letter =>
                     `
       <button
@@ -59,12 +63,7 @@
     `).join('');
 
                 document.getElementById('keyboard').innerHTML = buttonsHTML;
-            }
 
-            $("#game").html(`<h1>Snowman (Trigger free version of H***man)</h1>
-<button id="start">Click to Start</button>`);
-
-            $("#start").click(function () {
                 myDatabase.ref("running").set(1);
                 myDatabase.ref("words").child("cword").once('value', ss => {
                     let wordcount = parseInt(ss.val());
