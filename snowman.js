@@ -75,12 +75,12 @@ function handleGuess(selection) {
         wrongCount++;
         updateWrongCount();
         gameLost();
-        updateHangmanPicture();
+        updateSnowmanImg();
     }
 }
 
-function updateHangmanPicture() {
-    document.getElementById('hangmanPic').src = './images/' + wrongCount + '.jpg';
+function updateSnowmanImg() {
+    document.getElementById('snowmanImg').src = './images/' + wrongCount + '.jpg';
 }
 
 function gameWon() {
