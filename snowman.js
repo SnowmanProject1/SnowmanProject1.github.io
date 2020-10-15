@@ -11,49 +11,47 @@ var firebaseConfig = {
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
+//let myDatabase = firebase.database().ref("words");
 let myDatabase = firebase.database();
 
-
-var programming_languages = [
-    "python",
-    "javascript",
-    "mongodb",
-    "json",
-    "java",
-    "html",
-    "css",
-    "c",
-    "csharp",
-    "golang",
-    "kotlin",
-    "php",
-    "sql",
-    "ruby"
-]
-
 let answer = '';
-let maxWrong = 6;
-let mistakes = 0;
+let answerLength = 0; 
+let c1 = '';
+let c2 = '';
+let maxWrong = 8;
+let wrongCount = 0;
 let guessed = [];
 let wordStatus = null;
 
 function randomWord() {
-    //answer = programming_languages[Math.floor(Math.random() * programming_languages.length)];
-        let wordcount = 220;
-        let randomword = parseInt(Math.floor(wordcount * Math.random()));
-        myDatabase.ref("words").child("cword").child(randomword).once('value', ss2 => {
-            answer = ss2.val();
-            });
-       
+        let wordcount = 224;
+        let randomword = Math.floor(wordcount * Math.random());
+      
+  myDatabase.ref("cword").child(randomword).once("value", ss=>{
+    answer = ss.val().toString();
+  });
+ 
             console.log("Answer is: " + answer);
-
         }
 
+function fillLetters(){
+  
+   answerLength = answer.length;
+  c1 = String(answer).charAt(Math.floor(answerLength * Math.random()));
+  c2 = String(answer).charAt(Math.floor(answerLength * Math.random()));
+  guessed.push(c1);
+  guessed.push(c2);
+  
+  wordStatus = answer.split('').map(c1 => (guessed.indexOf(c1) >= 0 ? c1 : " _ ")).join('');
+
+                document.getElementById('wordSpotlight').innerHTML = wordStatus;
+}
+
 function generateButtons() {
-                let buttonsHTML = 'abcdefghijklmnopqrstuvwxyz'.split('').map(letter =>
+                let buttonsHTML = 'abcdefghijklmnopqrstuvwxyz '.split('').map(letter =>
                     `
         <button
-          class="btn btn-lg btn-primary m-2"
+          class="btn btn-lg btn-dark m-2"
           id='` + letter + `'
           onClick="handleGuess('` + letter + `')"
         >
@@ -65,6 +63,8 @@ function generateButtons() {
             }
 
 function handleGuess(chosenLetter) {
+                //guessed.push(c1);
+                //guessed.push(c2);
                 guessed.indexOf(chosenLetter) === -1 ? guessed.push(chosenLetter) : null;
                 document.getElementById(chosenLetter).setAttribute('disabled', true);
 
@@ -72,27 +72,27 @@ function handleGuess(chosenLetter) {
                     guessedWord();
                     checkIfGameWon();
                 } else if (answer.indexOf(chosenLetter) === -1) {
-                    mistakes++;
-                    updateMistakes();
+                    wrongCount++;
+                    updateWrongCount();
                     checkIfGameLost();
                     updateHangmanPicture();
                 }
             }
 
 function updateHangmanPicture() {
-                document.getElementById('hangmanPic').src = './images/' + mistakes + '.jpg';
+                document.getElementById('hangmanPic').src = './images/' + wrongCount + '.jpg';
             }
 
 function checkIfGameWon() {
                 if (wordStatus === answer) {
-                    document.getElementById('keyboard').innerHTML = 'You Won!!!';
+                    document.getElementById('keyboard').innerHTML = 'Game Over: You Win';
                 }
             }
 
 function checkIfGameLost() {
-                if (mistakes === maxWrong) {
+                if (wrongCount === maxWrong) {
                     document.getElementById('wordSpotlight').innerHTML = 'The answer was: ' + answer;
-                    document.getElementById('keyboard').innerHTML = 'You Lost!!!';
+                    document.getElementById('keyboard').innerHTML = 'Game Over: Snowman wins';
                 }
             }
 
@@ -102,19 +102,20 @@ function guessedWord() {
                 document.getElementById('wordSpotlight').innerHTML = wordStatus;
             }
 
-function updateMistakes() {
-                document.getElementById('mistakes').innerHTML = mistakes;
+function updateWrongCount() {
+                document.getElementById('wrongCount').innerHTML = wrongCount;
             }
 
 function reset() {
-                mistakes = 0;
+                wrongCount = 0;
                 guessed = [];
                 document.getElementById('hangmanPic').src = './images/0.jpg';
 
                 randomWord();
                 guessedWord();
-                updateMistakes();
+                updateWrongCount();
                 generateButtons();
+                //fillLetters();
             }
 
 document.getElementById('maxWrong').innerHTML = maxWrong;
@@ -122,3 +123,4 @@ document.getElementById('maxWrong').innerHTML = maxWrong;
         randomWord();
         generateButtons();
         guessedWord();
+        //fillLetters();
